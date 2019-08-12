@@ -1,0 +1,55 @@
+<?php
+require __DIR__.'/vendor/autoload.php';
+
+$app = Base::instance();
+$app->mset(array(
+	'DEBUG' => 3,
+	'DB' => new DB\Jig('storage/db/', DB\Jig::FORMAT_JSON),
+	'TOKEN' => array(
+		'KEY' => 'Authorization',
+		'STARTS_WITH' => 'X-Auth-Token',
+		'TABLE' => 'Tokens',
+		'TABLE_KEY' => 'token'
+	),
+));
+
+abstract class Model extends DB\Cortex { protected $db = 'DB'; }
+class User extends Model { protected $table = 'users', $fieldConf = ['email' => ['type' => DB\SQL\Schema::DT_TEXT]]; }
+class Tokens extends Model {protected $table = 'tokens', $fieldConf = ['user' => ['belongs-to-one' => 'User'], 'token' => ['type' => DB\SQL\Schema::DT_TEXT]]; }
+
+// GENERATE USER & TOKEN FOR TESTING
+/*$uModel1 = new User();
+$uModel1->email = 'pilaniaanand@gmail.com';
+$uModel1->save();
+$uModel2 = new User();
+$uModel2->email = 'anutig3r@gmail.com';
+$uModel2->save();
+$tModel1 = new Tokens();
+$tModel1->user = $uModel1;
+$tModel1->token = 'abcdefghijklmnopqrstuvwxyz';
+$tModel1->save();
+$tModel2 = new Tokens();
+$tModel2->user = $uModel2;
+$tModel2->token = '01234567890';
+$tModel2->save();*/
+
+$app->route('GET|HEAD /', function($app){
+	echo "index";
+});
+$app->route('GET|HEAD /home', function($app){
+	echo "home";
+});
+$app->route('GET|HEAD /home/@id', function($app){
+	echo $app->get('PARAMS.id');
+});
+$app->route('GET|POST /profile/@id', function($app){
+	echo $app->get('PARAMS.id');
+});
+
+$token = TokenMiddleware::instance();
+$token->protect(array('HEAD|GET /home/*', 'POST /profile/*'), function($app, $params, $alias) {
+	echo 'error';
+});
+$token->run();
+
+$app->run();
