@@ -12,6 +12,7 @@ Just pass your `token secure` routes [`/` OR '/secure/*'] & `handler` to `f3-tok
 ## Usage
 
 - 1: Configure `f3`:
+
       `$f3->mset(array(
       
           'TOKEN' => array(
