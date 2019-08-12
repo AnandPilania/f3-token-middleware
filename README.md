@@ -4,6 +4,8 @@ Just pass your `token secure` routes [`/` OR '/secure/*'] & `handler` to `f3-tok
 
 **NOTE:** This package built/ported from [ikkez/f3-middleware](https://github.com/ikkez/f3-middleware).
 
+**CHECK `example.file` for sample**
+
 ## Install
 
       `composer require anandpilania/f3-token-middleware`
