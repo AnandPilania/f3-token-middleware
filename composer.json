@@ -17,6 +17,7 @@
 		"files": ["TokenMiddleware.php"]
 	},
 	"suggest": {
-		"anandpilania/f3-validator": "Validator package for FatFreeFramework."
+		"anandpilania/f3-validator": "Validator package for FatFreeFramework.",
+		"anandpilania/f3-jwt-middleware": "JWT Auth Middleware for FatFreeFramework."
 	}
 }
