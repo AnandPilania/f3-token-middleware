@@ -1,0 +1,22 @@
+{
+    "name": "anandpilania/f3-token-middleware",
+    "description": "Token Auth Middleware for FatFreeFramework.",
+	"keywords": ["f3", "fatfree", "fatfreeframework", "anandpilania", "f3-token-middleware", "f3-token-auth"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anand Pilania",
+            "email": "pilaniaanand@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+		"bcosca/fatfree-core": "^3.6"
+	},
+	"autoload": {
+		"files": ["TokenMiddleware.php"]
+	},
+	"suggest": {
+		"anandpilania/f3-validator": "Validator package for FatFreeFramework."
+	}
+}
