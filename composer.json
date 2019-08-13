@@ -3,6 +3,7 @@
     "description": "Token Auth Middleware for FatFreeFramework.",
 	"keywords": ["f3", "fatfree", "fatfreeframework", "anandpilania", "f3-token-middleware", "f3-token-auth"],
     "license": "MIT",
+	"version": "0.0.2",
     "authors": [
         {
             "name": "Anand Pilania",
