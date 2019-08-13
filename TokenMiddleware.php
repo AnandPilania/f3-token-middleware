@@ -73,7 +73,15 @@ class TokenMiddleware extends Prefab {
 	}
 	
 	protected function validate($handler, $args, $alias) {
-		$authHeader = $this->app->get('HEADERS.' . $this->app->get('TOKEN.KEY'));
+		$authHeader = null;
+		$type = strtoupper($this->app->get('TOKEN.TYPE'));
+		
+		if($type === 'HEADER') {
+			$authHeader = $this->app->get('HEADERS.' . $this->app->get('TOKEN.KEY'));
+		} else if($type === 'QUERY') {
+			$verb = $this->app->get('VERB');
+			$authHeader = $this->app->get($verb . '.' . $this->app->get('TOKEN.KEY'));
+		}
 		
 		if(!$authHeader) {
 			$this->app->call($handler, array($this->app, $args, $alias));
@@ -81,7 +89,7 @@ class TokenMiddleware extends Prefab {
 		}
 		
 		$authToken = $authHeader;
-		if($this->app->get('TOKEN.STARTS_WITH')) {
+		if($type === 'HEADER' && $this->app->get('TOKEN.STARTS_WITH')) {
 			$_ex = explode(' ', $authHeader);
 			$authToken = isset($_ex[1]) ? $_ex[1] : null;
 		}

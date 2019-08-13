@@ -18,10 +18,11 @@ Just pass your `token secure` routes [`/` OR '/secure/*'] & `handler` to `f3-tok
       `$f3->mset(array(
       
           'TOKEN' => array(
-          
-              'KEY' => 'Authorization', // HEADER KEY
+			  'TYPE' => 'HEADER', // HEADER|QUERY
+			  
+              'KEY' => 'Authorization', // TOKEN KEY
               
-              'STARTS_WITH' => 'X-Auth-Token', // HEADER KEY -> "Authorization: X-Auth-Token xxxxxxxx"
+              'STARTS_WITH' => 'X-Auth-Token', // TOKEN KEY STARTS WITH (supports only HEADER type) -> "Authorization: X-Auth-Token xxxxxxxx"
               
               'TABLE' => 'Models\Token', // FQCN
               

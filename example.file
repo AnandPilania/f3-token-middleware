@@ -6,6 +6,7 @@ $app->mset(array(
 	'DEBUG' => 3,
 	'DB' => new DB\Jig('storage/db/', DB\Jig::FORMAT_JSON),
 	'TOKEN' => array(
+		'TYPE' => 'HEADER',
 		'KEY' => 'Authorization',
 		'STARTS_WITH' => 'X-Auth-Token',
 		'TABLE' => 'Tokens',
