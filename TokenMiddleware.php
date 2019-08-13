@@ -8,30 +8,29 @@ class TokenMiddleware extends Prefab {
 	}
 	
 	public function protect($pattern, $handler) {
-		$event = 'justRun';
 		$bak = $this->app->ROUTES;
 		$this->app->ROUTES=array();
 		$this->app->route($pattern, $handler);
-		$this->routes[$event] = (isset($this->routes[$event])) ? $this->app->extend('ROUTES',$this->routes[$event]) : $this->app->ROUTES;
+		$this->routes = (count($this->routes)) ? $this->app->extend('ROUTES',$this->routes) : $this->app->ROUTES;
 		$this->app->ROUTES=$bak;
 	}
 	
-	public function run($event='justRun') {
-		if (!isset($this->routes[$event]))
+	public function run() {
+		if (!count($this->routes))
 			return;
 		$paths=[];
-		foreach ($keys=array_keys($this->routes[$event]) as $key) {
+		foreach ($keys=array_keys($this->routes) as $key) {
 			$path=preg_replace('/@\w+/','*@',$key);
 			if (substr($path,-1)!='*')
 				$path.='+';
 			$paths[]=$path;
 		}
-		$vals=array_values($this->routes[$event]);
+		$vals=array_values($this->routes);
 		array_multisort($paths,SORT_DESC,$keys,$vals);
-		$this->routes[$event]=array_combine($keys,$vals);
+		$this->routes=array_combine($keys,$vals);
 		// Convert to BASE-relative URL
 		$req=urldecode($this->app['PATH']);
-		foreach ($this->routes[$event] as $pattern=>$routes) {
+		foreach ($this->routes as $pattern=>$routes) {
 			if (!$args=$this->app->mask($pattern,$req))
 				continue;
 			ksort($args);
