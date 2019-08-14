@@ -83,15 +83,21 @@ class TokenMiddleware extends Prefab {
 			$authHeader = $this->app->get($verb . '.' . $this->app->get('TOKEN.KEY'));
 		}
 		
-		if(!$authHeader) {
+		$startsWith = $this->app->get('TOKEN.STARTS_WITH');
+		if(!$authHeader || (($type === 'HEADER' && $startsWith) && !$this->startsWith($authHeader, $startsWith))) {
 			$this->app->call($handler, array($this->app, $args, $alias));
 			return false;
 		}
 		
 		$authToken = $authHeader;
-		if($type === 'HEADER' && $this->app->get('TOKEN.STARTS_WITH')) {
-			$_ex = explode(' ', $authHeader);
+		if($startsWith && $type === 'HEADER') {
+			$_ex = explode($startsWith . ' ', $authHeader);
 			$authToken = isset($_ex[1]) ? $_ex[1] : null;
+		}
+		
+		if(!$authToken) {
+			$this->app->call($handler, array($this->app, $args, $alias));
+			return false;
 		}
 		
 		$model = $this->app->get('TOKEN.TABLE');
@@ -113,5 +119,14 @@ class TokenMiddleware extends Prefab {
 		if(isset($model->user)) {
 			$this->app->set('TOKEN.user', $model->user);
 		}
+	}
+	
+	private function startsWith($haystack, $needles) {
+		foreach ((array) $needles as $needle) {
+			if ($needle !== '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
